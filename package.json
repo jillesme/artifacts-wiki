@@ -1,0 +1,42 @@
+{
+	"name": "artifacts-wiki",
+	"private": true,
+	"type": "module",
+	"imports": {
+		"#/*": "./src/*"
+	},
+	"scripts": {
+		"dev": "vite dev --port 3000",
+		"build": "vite build",
+		"preview": "pnpm run build && vite preview",
+		"deploy": "pnpm run build && wrangler deploy",
+		"cf-typegen": "wrangler types"
+	},
+	"dependencies": {
+		"@cloudflare/vite-plugin": "^1.62.0",
+		"@tailwindcss/vite": "^4.3.3",
+		"@tanstack/react-devtools": "^0.10.13",
+		"@tanstack/react-router": "^1.170.40",
+		"@tanstack/react-router-devtools": "^1.167.2",
+		"@tanstack/react-start": "^1.168.59",
+		"@tanstack/router-plugin": "^1.168.41",
+		"isomorphic-git": "^1.42.3",
+		"lucide-react": "^1.48.0",
+		"marked": "^18.0.14",
+		"react": "^19.3.0",
+		"react-dom": "^19.3.0",
+		"tailwindcss": "^4.3.3"
+	},
+	"devDependencies": {
+		"@tailwindcss/typography": "^0.5.20",
+		"@tanstack/devtools-vite": "^0.8.5",
+		"@types/node": "^22.20.4",
+		"@types/react": "^19.3.0",
+		"@types/react-dom": "^19.3.0",
+		"@vitejs/plugin-react": "^6.1.1",
+		"cf": "1.0.0-beta.5",
+		"typescript": "^5.9.3",
+		"vite": "^8.3.1",
+		"wrangler": "^4.143.0"
+	}
+}

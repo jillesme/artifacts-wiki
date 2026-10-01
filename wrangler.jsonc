@@ -1,0 +1,43 @@
+/**
+ * For more details on how to configure Wrangler, refer to:
+ * https://developers.cloudflare.com/workers/wrangler/configuration/
+ */
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "artifacts-wiki",
+	"account_id": "<YOUR_ACCOUNT_ID>",
+	// Bumped to a date that supports Artifacts
+	"compatibility_date": "2026-09-28",
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
+	"main": "@tanstack/react-start/server-entry",
+	"observability": {
+		"enabled": true
+	},
+	"upload_source_maps": true,
+
+	/**
+	 * D1 stores wiki page metadata and a pointer to the Artifacts repo + current commit SHA.
+	 * The actual page content (markdown + assets) lives as a real Git repo in Artifacts.
+	 */
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "artifacts-wiki-db",
+			"database_id": "<YOUR_D1_DATABASE_ID>",
+			"migrations_dir": "migrations"
+		}
+	],
+
+	/**
+	 * Artifacts: each wiki page is its own versioned Git repo.
+	 * https://developers.cloudflare.com/artifacts/
+	 */
+	"artifacts": [
+		{
+			"binding": "ARTIFACTS",
+			"namespace": "wiki"
+		}
+	]
+}

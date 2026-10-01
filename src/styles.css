@@ -1,0 +1,450 @@
+@import url("https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Playfair+Display:ital,wght@0,600..900;1,600..900&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&family=Libre+Franklin:wght@500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap");
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme {
+  --font-sans: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-nameplate: "UnifrakturMaguntia", "Old English Text MT", serif;
+  --font-grotesk: "Libre Franklin", "Franklin Gothic Medium", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+/* ──────────────────────────────────────────────────────────────────────
+   A broadsheet printed on newsprint, with Cloudflare orange as the one
+   spot colour (the way old papers ran a single extra ink).
+   Square corners, hairline rules, justified columns, black ink.
+   ────────────────────────────────────────────────────────────────────── */
+
+:root {
+  --ink: #1b1a17;
+  --ink-soft: #3b3833;
+  --ink-faint: #6e695f;
+  --parchment: #f5f1e8; /* newsprint */
+  --parchment-deep: #ebe5d8; /* inset boxes */
+  --parchment-hi: #faf7f0; /* raised boxes */
+
+  --cf-orange: #f6821f;
+  --cf-orange-deep: #d9620b;
+  --cf-orange-ink: #9a3f05;
+
+  /* Legacy tokens used across components */
+  --oxblood: var(--cf-orange-deep);
+  --moss: #3b3833;
+  --umber: #1b1a17;
+
+  --rule: rgba(27, 26, 23, 0.28);
+  --rule-soft: rgba(27, 26, 23, 0.12);
+
+  --selection: rgba(246, 130, 31, 0.3);
+}
+
+/* "Night edition" */
+:root[data-theme="dark"] {
+  --ink: #ece6d8;
+  --ink-soft: #c9c2b2;
+  --ink-faint: #8f887a;
+  --parchment: #16150f;
+  --parchment-deep: #201e17;
+  --parchment-hi: #1b1a13;
+  --cf-orange-deep: #f6821f;
+  --cf-orange-ink: #ffb27d;
+  --moss: #c9c2b2;
+  --umber: #ece6d8;
+  --rule: rgba(236, 230, 216, 0.28);
+  --rule-soft: rgba(236, 230, 216, 0.12);
+  --selection: rgba(246, 130, 31, 0.42);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ink: #ece6d8;
+    --ink-soft: #c9c2b2;
+    --ink-faint: #8f887a;
+    --parchment: #16150f;
+    --parchment-deep: #201e17;
+    --parchment-hi: #1b1a13;
+    --cf-orange-deep: #f6821f;
+    --cf-orange-ink: #ffb27d;
+    --moss: #c9c2b2;
+    --umber: #ece6d8;
+    --rule: rgba(236, 230, 216, 0.28);
+    --rule-soft: rgba(236, 230, 216, 0.12);
+    --selection: rgba(246, 130, 31, 0.42);
+  }
+}
+
+/* Element defaults live in the base layer so Tailwind utilities win. */
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  ::selection {
+    background: var(--selection);
+    color: var(--ink);
+  }
+
+  html,
+  body,
+  #app {
+    min-height: 100%;
+  }
+
+  body {
+    margin: 0;
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-optical-sizing: auto;
+    font-size: 17px;
+    line-height: 1.55;
+    background-color: var(--parchment);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  a {
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--cf-orange);
+  }
+
+  a:hover {
+    color: var(--cf-orange-deep);
+  }
+
+  code {
+    font-family: var(--font-mono);
+    font-size: 0.84em;
+    background: var(--parchment-deep);
+    padding: 1px 5px;
+    color: var(--ink);
+  }
+
+  pre {
+    font-family: var(--font-mono);
+  }
+
+  pre code {
+    background: transparent;
+    padding: 0;
+    font-size: inherit;
+    color: inherit;
+  }
+
+  hr {
+    border: 0;
+    border-top: 1px solid var(--rule);
+    margin-block: 2rem;
+  }
+}
+
+@layer components {
+/* ──────────────────────────────────────────────────────────────────────
+   Layout & rules
+   ────────────────────────────────────────────────────────────────────── */
+
+.measure {
+  width: min(68ch, calc(100% - 2rem));
+  margin-inline: auto;
+}
+
+.measure-wide {
+  width: min(1180px, calc(100% - 2rem));
+  margin-inline: auto;
+}
+
+.rule {
+  height: 1px;
+  background: var(--ink);
+}
+
+/* Thick-thin rule under the nameplate */
+.double-rule {
+  height: 6px;
+  border-top: 3px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+}
+
+/* Section break: thin over thick */
+.triple-rule {
+  height: 6px;
+  border-top: 1px solid var(--ink);
+  border-bottom: 3px solid var(--ink);
+}
+
+/* Vertical column rules between grid columns */
+.col-rules > * + * {
+  border-left: 1px solid var(--rule);
+}
+
+@media (max-width: 639px) {
+  .col-rules > * + * {
+    border-left: 0;
+    border-top: 1px solid var(--rule);
+    padding-top: 1.5rem;
+  }
+}
+
+/* Justified newspaper body copy */
+.newsprint {
+  text-align: justify;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+}
+
+/* ──────────────────────────────────────────────────────────────────────
+   Typography
+   ────────────────────────────────────────────────────────────────────── */
+
+.display {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 1.05;
+  color: var(--ink);
+}
+
+.nameplate {
+  font-family: var(--font-nameplate);
+  font-weight: 400;
+  line-height: 1;
+  color: var(--ink);
+}
+
+.nameplate em {
+  font-style: normal;
+}
+
+.smallcaps,
+.kicker,
+.folio {
+  font-family: var(--font-grotesk);
+  font-weight: 700;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.kicker {
+  color: var(--ink);
+  font-weight: 800;
+}
+
+.folio {
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.byline {
+  font-family: var(--font-sans);
+  font-style: italic;
+  color: var(--ink-soft);
+}
+
+/* Black drop cap, three lines deep */
+.editorial-body > p:first-of-type::first-letter {
+  font-family: var(--font-display);
+  font-weight: 900;
+  float: left;
+  font-size: 4.6rem;
+  line-height: 0.82;
+  padding: 0.3rem 0.5rem 0 0;
+  color: var(--ink);
+}
+
+/* ──────────────────────────────────────────────────────────────────────
+   Components
+   ────────────────────────────────────────────────────────────────────── */
+
+.masthead {
+  background: var(--parchment);
+}
+
+/* The orange spot-colour line at the very top of the paper */
+.spot-rule {
+  height: 4px;
+  background: var(--cf-orange);
+}
+
+/* Boxed "ears" either side of the nameplate */
+.ear {
+  border: 1px solid var(--ink);
+  padding: 0.45rem 0.6rem;
+  font-family: var(--font-grotesk);
+  font-size: 0.66rem;
+  line-height: 1.35;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-soft);
+}
+
+.ear strong {
+  display: block;
+  color: var(--ink);
+  font-weight: 800;
+}
+
+.nav-link {
+  font-family: var(--font-grotesk);
+  font-weight: 700;
+  font-size: 0.74rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink);
+  text-decoration: none;
+  padding-block: 0.2rem;
+  border-bottom: 2px solid transparent;
+}
+
+.nav-link:hover,
+.nav-link.is-active {
+  color: var(--ink);
+  border-bottom-color: var(--cf-orange);
+}
+
+.btn-primary,
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-grotesk);
+  font-weight: 700;
+  font-size: 0.76rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.7rem 1.05rem;
+  border: 1px solid var(--ink);
+  border-radius: 0;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn-primary {
+  color: #fff;
+  background: var(--cf-orange);
+  border-color: var(--cf-orange);
+}
+
+.btn-primary:hover {
+  color: #fff;
+  background: var(--cf-orange-deep);
+  border-color: var(--cf-orange-deep);
+}
+
+.btn-ghost {
+  color: var(--ink);
+  background: transparent;
+}
+
+.btn-ghost:hover {
+  color: var(--parchment);
+  background: var(--ink);
+}
+
+.btn-primary:disabled,
+.btn-ghost:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.field-label {
+  font-family: var(--font-grotesk);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink);
+}
+
+.field-input,
+.field-textarea {
+  font-family: var(--font-sans);
+  font-size: 1.02rem;
+  color: var(--ink);
+  background: var(--parchment-hi);
+  border: 1px solid var(--rule);
+  border-radius: 0;
+  padding: 0.65rem 0.8rem;
+  outline: none;
+}
+
+.field-input:focus,
+.field-textarea:focus {
+  border-color: var(--ink);
+  box-shadow: inset 0 -2px 0 var(--cf-orange);
+}
+
+.field-textarea {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  min-height: 360px;
+  resize: vertical;
+}
+
+.note-error {
+  font-size: 0.92rem;
+  color: var(--cf-orange-ink);
+  border: 1px solid var(--cf-orange-deep);
+  padding: 0.65rem 0.85rem;
+}
+
+/* Terminal block stays dark, like a pasted-in wire printout */
+.terminal {
+  font-family: var(--font-mono);
+  font-size: 0.84rem;
+  line-height: 1.7;
+  background: #121210;
+  color: #f1ece0;
+  padding: 1rem 1.1rem;
+  overflow-x: auto;
+  border-left: 4px solid var(--cf-orange);
+}
+
+.terminal::before {
+  content: "$";
+  color: var(--cf-orange);
+  margin-right: 0.7rem;
+  user-select: none;
+}
+
+/* Small inline labels (SHA, fork-of, etc.) */
+.tag {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--ink-soft);
+  padding: 1px 6px;
+  border: 1px solid var(--rule);
+}
+
+.tag-accent {
+  color: var(--cf-orange-ink);
+  border-color: var(--cf-orange);
+}
+
+.tag-moss {
+  font-family: var(--font-grotesk);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Section break: a short centred rule */
+.dinkus {
+  width: 5rem;
+  height: 1px;
+  margin: 3rem auto 2.5rem;
+  background: var(--ink);
+}
+}
